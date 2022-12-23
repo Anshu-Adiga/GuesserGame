@@ -1,0 +1,124 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: rgb(37, 37, 37);
+        text-align: center;
+        font-family: "Roboto", sans-serif;
+        color:rgb(200, 200, 200);
+      }
+      h1 {
+        color: rgb(240, 240, 240);
+      }
+      button {
+        background-color: rgb(187, 187, 187);
+        border: 2px solid rgb(255, 255, 255);
+        color: rgb(51, 51, 51);
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  transition: box-shadow 0.3s;
+  transition: transform 0.1s;
+      }
+      button:active { transform: scale(0.9); }
+      button:hover {
+        background-color: lightgray;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+      }
+      p {
+        color: rgb(141, 141, 141);
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Guessing Game</h1>
+    <p>Think of a number between 1 and 100 and I will guess it.</p>
+    <button id="start-button">Start</button>
+    <button id="too-low-button" style="display: none">Too Low</button>
+    <button id="too-high-button" style="display: none">Too High</button>
+    <button id="correct-button" style="display: none">Correct</button>
+    <p id="output"></p>
+    <p id="guesses"></p>
+    <button id="restart-button" style="display: none">Restart</button>
+    <button id="back" onclick="location.href='index.html'">Home</button>
+
+    <script>
+      // Initialize variables
+      var n = 1;
+      var g = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+      var h = 100;
+      var l = 2;
+      var guesses = [];
+
+      // Get references to buttons
+      var startButton = document.getElementById("start-button");
+      var tooLowButton = document.getElementById("too-low-button");
+      var tooHighButton = document.getElementById("too-high-button");
+      var correctButton = document.getElementById("correct-button");
+      var restartButton = document.getElementById("restart-button");
+
+      // Add click listener to start button
+      startButton.addEventListener("click", function() {
+        startButton.style.display = "none";
+        tooLowButton.style.display = "inline-block";
+        tooHighButton.style.display = "inline-block";
+        correctButton.style.display = "inline-block";
+        restartButton.style.display = "inline-block";
+        document.getElementById("output").innerHTML = "Guess: " + g;
+      });
+
+      // Add click listeners to game buttons
+      tooLowButton.addEventListener("click", function() {
+        l = g;
+        g = Math.floor((h + g) / 2);
+        if (g == 99 && h == 100) {
+          g = 100;
+        }
+        n += 1;
+        updateOutput();
+      });
+      tooHighButton.addEventListener("click", function() {
+        h = g;
+        g = Math.floor((l + g) / 2);
+        if (g == 2 && l == 2) {
+          g = 1;
+        }
+        n += 1;
+        updateOutput();
+      });
+      correctButton.addEventListener("click", function() {
+        var output = "I got it right in " + n + " guesses! The number was " + g + ".";
+        document.getElementById("output").innerHTML = output;
+        n = 1;
+      });
+      restartButton.addEventListener("click", function() {
+        n = 1;
+        g = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+        h = 100;
+        l = 2;
+        guesses = [];
+        document.getElementById("guesses").innerHTML = "";
+        startButton.style.display = "inline-block";
+        tooLowButton.style.display = "none";
+        tooHighButton.style.display = "none";
+        correctButton.style.display = "none";
+        restartButton.style.display = "none";
+        output = " ";
+        document.getElementById("output").innerHTML = output;
+        
+      });
+
+      // Update output
+      function updateOutput() {
+        guesses.push(g);
+        document.getElementById("guesses").innerHTML = "Past guesses: " + guesses.join(", ");
+        document.getElementById("output").innerHTML = "Guess: " + g;
+      }
+    </script>
+  </body>
+</html>
+
