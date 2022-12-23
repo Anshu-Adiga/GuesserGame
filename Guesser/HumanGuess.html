@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: lightblue;
+        text-align: center;
+      }
+      h1 {
+        color: navy;
+      }
+      input[type=number] {
+        width: 150px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: white;
+        background-image: url('searchicon.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        padding: 12px 20px 12px 40px;
+        display: none;
+        margin: 0 auto;
+        margin-top: 59px;
+      }
+      button {
+        background-color: white;
+        border: 2px solid navy;
+        color: navy;
+        padding: 20px 40px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 20px;
+        margin: 0 auto;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: lightgray;
+      }
+      p {
+        color: navy;
+        font-size: 16px;
+      }
+      #restart-button, #guess-button {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Human Guesser</h1>
+    <p>I'm thinking of a number between 1 and 100. Can you guess what it is? </p>
+    <p>Enter a number:</p>
+    <input type="number" id="inputNumber" pattern="[0-9]*" title="Please enter a number" required>
+    <button id="guess-button">Guess</button>
+    <p id="output"></p>
+    <button id="restart-button">Restart</button>
+    <button id="start-button">Start</button>
+
+    <button id="back" onclick="location.href='index.html'">Home</button>
+
+    <script>
+   
+      // Initialize variables
+      var targetNumber;
+      var numGuesses = 0;
+      var inputNumber = document.getElementById("inputNumber");
+      var guessButton = document.getElementById("guess-button");
+      var restartButton = document.getElementById("restart-button");
+      var startButton = document.getElementById("start-button");
+
+      // Generate a random number to guess
+      function generateNumber() {
+        targetNumber = Math.floor(Math.random() * 100) + 1;
+        document.getElementById("output").innerHTML = "";
+      }
+
+     
+      // Show the restart and guess buttons, and the text input field when the start button is clicked
+      startButton.addEventListener("click", function() {
+  generateNumber();  // Generate a new target number
+  numGuesses = 0;
+  inputNumber.value = "";
+  startButton.style.display = "none";
+  restartButton.style.display = "block";
+  guessButton.style.display = "block";
+  inputNumber.style.display = "block";
+  console.log(targetNumber);
+});
+      // Hide all buttons except for the start button when the restart button is clicked
+      restartButton.addEventListener("click", function() {
+        generateNumber();
+        numGuesses = 0;
+        inputNumber.value = "";
+        startButton.style.display = "block";
+        restartButton.style.display = "none";
+        guessButton.style.display = "none";
+        inputNumber.style.display = "none";
+        document.getElementById("output").innerHTML = "";
+      });
+
+      // Process the guess when the "Guess" button is clicked or when the enter key is pressed in the text input field
+guessButton.addEventListener("click", function() {
+  processGuess(inputNumber);
+});
+
+inputNumber.addEventListener("keydown", function(event) {
+  if (event.keyCode === 13) {
+    processGuess(inputNumber);
+  }
+});
+
+
+      function processGuess(inputNumber) {
+  numGuesses++;
+  var input = parseInt(inputNumber.value, 10);  // Convert input to a number
+  var output;  // Define output before the if statement
+  if (input === targetNumber) {  // Compare values for equality and type
+    output = "You got it right in " + numGuesses + " guesses! The number was " + targetNumber + ".";
+    inputNumber.value = "";
+    restartButton.style.display = "block";
+    guessButton.style.display = "none";
+  } else if (input > targetNumber) {
+    output = "Too high. Guess lower. (Last Guess: "+input+")";
+  } else if (input < targetNumber) {
+    output = "Too low. Guess higher.(Last Guess: "+input+")";
+  } else { output = "Broken";
+  }
+  document.getElementById("output").innerHTML = output;
+  inputNumber.value = "";  // Clear the input field
+}
+
+
+
+
+
+    </script>
+  </body>
+</html>
